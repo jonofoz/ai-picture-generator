@@ -41,5 +41,3 @@ app.post("/generate", async (req, res) => {
 });
 
 app.listen(8080, () => console.log("App is ready to generate art on 'http://localhost:8080/generate'!"))
-
-export default app;
