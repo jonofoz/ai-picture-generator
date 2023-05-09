@@ -1,0 +1,21 @@
+{
+  "name": "ai-picture-generator-ui",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/node": "^20.1.0",
+    "typescript": "^5.0.2",
+    "vite": "^4.3.2"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "ts-node": "^10.9.1"
+  }
+}
