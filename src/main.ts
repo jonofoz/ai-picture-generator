@@ -1,24 +1,48 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import "./style.css"
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+const form = document.querySelector('form');
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+form?.addEventListener("submit", async(e) => {
+  e.preventDefault();
+
+  const apiURL = import.meta.env.VITE_API_URL;
+  if (!apiURL){
+    throw new Error("VITE_API_URL is undefined.")
+  }
+  showSpinner();
+  const formData = new FormData(form);
+
+  const response = await fetch(apiURL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      prompt: formData.get("prompt")
+    })
+  })
+
+  if (response.ok){
+    const { image } = await response.json();
+    console.log(image)
+    const result = document.querySelector("#result")!;
+    result.innerHTML = `<img src="${image}" width="512" />`;
+  } else {
+    const error = await response.text();
+    alert(error);
+    console.error(error);
+  }
+  hideSpinner();
+})
+
+function showSpinner() {
+  const button = document.querySelector('button')!;
+  button.disabled = true;
+  button.innerHTML = `Generating... <span class="spinner">🧠</span>`
+}
+
+function hideSpinner() {
+  const button = document.querySelector('button')!;
+  button.disabled = false;
+  button.innerHTML = "Generate"
+}
